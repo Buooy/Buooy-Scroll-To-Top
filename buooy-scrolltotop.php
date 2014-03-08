@@ -39,12 +39,12 @@ Class Buooy_Scrolltotop{
     	$this->plugin_url = plugins_url( "", __FILE__ );
 
     	add_action( 'wp_head', array( $this,'wp_head_style') );
-    	add_action( 'wp_footer', array( $this, 'wp_head_script') );
-        add_action( 'wp_head', array( $this,'wp_head_element') );
+    	add_action( 'wp_footer', array( $this, 'wp_footer_script') );
+        add_action( 'wp_footer', array( $this,'wp_footer_element') );
     }
 
     // Add Element
-    public function wp_head_element(){
+    public function wp_footer_element(){
     	$element 	= 	"<div class='".$this->prefix."container'>";
     	$element 	.= 	"<img class='".$this->prefix."image' src='".$this->plugin_url."/backtotop.png'>";
     	$element 	.= 	"</div>";
@@ -53,7 +53,7 @@ Class Buooy_Scrolltotop{
     }
 
 	// Add Script
-	public function wp_head_script(){
+	public function wp_footer_script(){
 		
 		$script 	= "<script>";
 		$script 	.= "
