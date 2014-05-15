@@ -14,7 +14,7 @@
  * Plugin Name:       Buooy Scroll To Top
  * Plugin URI:        http://buooy.com
  * Description:       Buooy Scroll To Top is a Scroll to Top that actually looks nice. And its incredibly easy to use. Just activate and go!
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Aaron Lee
  * Author URI:        http://buooy.com/
  * Text Domain:       buooy-scrolltotop-locale
@@ -45,8 +45,23 @@ Class Buooy_Scrolltotop{
 
     // Add Element
     public function wp_footer_element(){
+		
+		// Uses the default image where possible
+		$back_to_top_img = $this->plugin_url."/backtotop.png";
+		
+		// Uses the image found in get_stylesheet_directory/backtotop/backtotop.png/jpg/jpeg/gif in that order
+		$back_to_top_theme_dir = get_stylesheet_directory()."/backtotop/";
+		$back_to_top_theme_uri = get_stylesheet_directory_uri()."/backtotop/";
+		if( file_exists($back_to_top_theme_dir."backtotop.png") ){	$back_to_top_img = $back_to_top_theme_uri."backtotop.png";	}
+		else if( file_exists($back_to_top_theme_dir."backtotop.jpg") ){	$back_to_top_img = $back_to_top_theme_uri."backtotop.jpg";	}
+		else if( file_exists($back_to_top_theme_dir."backtotop.jpeg") ){	$back_to_top_img = $back_to_top_theme_uri."backtotop.jpeg";	}
+		else if( file_exists($back_to_top_theme_dir."backtotop.gif") ){	$back_to_top_img = $back_to_top_theme_uri."backtotop.gif";	}
+		
+		// if the filter is set, then it will use the filter
+		$back_to_top_img = apply_filters( 'back-to-top-image', $back_to_top_img );
+	
     	$element 	= 	"<div class='".$this->prefix."container'>";
-    	$element 	.= 	"<img class='".$this->prefix."image' src='".$this->plugin_url."/backtotop.png'>";
+    	$element 	.= 	"<img class='".$this->prefix."image' src='".$back_to_top_img."'>";
     	$element 	.= 	"</div>";
 
     	echo $element;
@@ -65,10 +80,12 @@ Class Buooy_Scrolltotop{
 								jQuery('.".$this->prefix."container').fadeOut();
 							}
 						});
-						jQuery('.".$this->prefix."container').click(function(){
-							jQuery('html,body').animate({
-								scrollTop: '0px'
-							},500);
+						jQuery(document).ready(function(){
+							jQuery('.".$this->prefix."container').click(function(){
+								jQuery('html,body').animate({
+									scrollTop: '0px'
+								},500);
+							});
 						});
 						";
 		$script 	.= "</script>";
